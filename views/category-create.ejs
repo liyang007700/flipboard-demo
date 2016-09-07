@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Create new catagory</title>
+	<meta name="viewport" content = "width=device-width,initial-scale=1,maximum-scale=1">
+	<script src="/js/jquery-3.1.0.min.js"></script>
+	<style>
+		div { margin: 10px 0; }
+		.replicable, .add-new, .removable, .remove { display: inline }
+	</style>
+	<script>
+		    $( document ).ready(function() {
+
+		    	// form validation
+		       $("form").submit(function(e) {		       		
+		       		$(".required").each( function (index) {
+		       			if ($(this).val() === "" ) {
+			       			e.preventDefault();
+			       			$(this).attr("placeholder", "必填选项");
+		       			}
+		       		} );
+		       });
+
+	       		// add & remove field 
+	       		$(".add-new").on("click", function() {
+	       			$(".replicable").clone()
+	       			.removeClass("replicable").addClass("removable")
+	       			.appendTo("#form-container")	       			
+	       			.wrap("<div></div>")
+	       			.after("<button type='button' class='remove'>删除条目</button>")	       			
+	       			.find("input").each(function (index, value) { $(this).val("") });
+	       		});
+
+	       		$(document).on("click", ".remove",  function() {
+	       			$(this).parent().remove();
+	       		});
+
+		    });
+	</script>
+</head>
+<body>
+	<form action="/category-save" method="post">
+		<div id="form-container">
+			<div>
+				<label for="user">类别：</label>
+				<input type="text" name="catagory" id="user" class="required" />
+			</div>
+			<div>
+				<div class="replicable">
+					<label for="">站点：</label>
+					<input type="text" name="site[]" id="" class="required" >
+					&nbsp;&nbsp;
+					<label for="">网址：</label>
+					<input type="text" name="url[]" id="" class="required" >
+					&nbsp;&nbsp;
+					<label for="">Icon：</label>
+					<input type="text" name="icon[]" id="" >
+					</div>
+				<button type="button" class="add-new">增加条目</button>
+			</div>
+		</div>
+		<button type="submit">Submit</button>
+	</form>
+</body>
+</html>

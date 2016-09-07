@@ -1,0 +1,524 @@
+*{
+	box-sizing:border-box;
+}
+html{
+	height:100%;
+	width:100%;
+	max-width:100%;
+}
+body{	
+	font-family:"Microsoft Yahei","Helvetica Neue","Droid Sans Fallback","Heiti SC",sans-self,Tahoma,Arial,Roboto,"Droid Sans";
+	font-size:16px;
+	margin:0 auto;
+	height:100%;
+	width:100%;
+	max-width:100%;
+	overflow: hidden;
+}
+#cover{		
+	height:100%;
+	background-image: url(../img/dark.jpg);
+	background-repeat: no-repeat;
+	background-size: cover;
+	background-attachment: fixed;
+	background-position: center;
+}
+#box{
+	position:relative;
+	top:5%;
+	left:2.5%;
+	height:90%;
+	width:95%;
+	border:3px solid #DF2828;	
+}
+#box p,#box h1{
+	color:white;
+}
+#box button{
+	margin:0 auto;
+	display: block;
+	color:white;
+	background-color: #DF2828;
+	border:#DF2828;
+	border-radius: 1.5em;
+	position:relative;
+	top:50%;
+	width:14em;
+}
+#btn-Login{
+	width:4.2em;
+	padding:.4em 1em;
+	border:1px white solid;
+	border-radius: 10%;
+	position:absolute;
+	top:.8em;
+	right:.8em;
+	font-family:"Microsoft Yahei";
+}
+h1{	
+	margin-bottom:.6em;
+	font-size:1.5em;
+	text-align: center;
+}
+#zh-flip{
+	text-align:center;
+	font-family:'Microsoft Yahei';
+}
+#content-box{
+	position: relative;
+	top:30%;
+}
+
+
+/***********************登录界面CSS开始***************************/
+.slide-wrapper{
+	z-index: 4;
+	width:100%;
+	height:100%;
+	max-width: 100%;
+	position:absolute;
+	top:0px;
+	left:0px;
+	background:white;
+	transform:translate3d(-100%,0,0);
+	transition:all 250ms ease-in-out;/*CSS效果改变时间：250ms 匀速改变*/
+	display:flex;
+	align-items: center;
+}
+.slide-wrapper.moved{
+	transform:translate3d(0,0,0);
+}
+.slide-wrapper #back{
+	position:absolute;
+	top:1em;
+	right:1em;
+}
+.slide-wrapper .container{
+	width:18em;
+	margin:0 auto;
+}
+.slide-wrapper input{
+	outline:medium;
+	border:none;
+	height:1.5em;
+	font-size: 1em;
+	width:18em;
+	
+}
+/*其他登录方式提示信息*/
+#login-info{
+	font-size:.5em;
+	text-align: center;
+	margin:1em 0;
+	color:#D8D6D6;
+}
+/*表单题目*/
+h2{
+	font-size: 1.5em;
+	margin-bottom: 1em;
+}
+/*输入弹出提示信息*/
+.hint-user,.hint-pwrd{
+	margin-bottom: 4px;
+	font-size:6pt;
+	position:relative;
+	top:0px;
+	left:0px;
+	opacity:0;
+	color:#6BBEF0;
+	transform:translate3d(0,16px,0);
+	transition:all 250ms ease-in-out;
+}
+.hint-user.input{
+	transform:translate3d(0,0,0);
+	opacity:1;	
+}
+.hint-pwrd.input{
+	transform:translate3d(0,0,0);
+	opacity:1;
+}
+/*输入框*/
+.row{
+	z-index: 4;
+	border-bottom: 2px solid #22A0F8;
+	margin-bottom: .5em;
+}
+#submit{
+	width:18em;
+}
+button{
+	width:18em;
+	height:3em;
+	padding:0;
+	margin-top:.5em;
+	background-color: white;
+	color:#D8D6D6;
+	border:1px solid #D8D6D6;
+	font-size: 1em;
+}
+button.ready{
+	background-color:#22A0F8;
+	color:white;
+}
+#wx-login{
+	height:3em;
+	background-color: #30FB30;
+}
+#wx-login p{
+	text-align: center;
+	color:white;
+	padding:1em 0;
+}
+#login-help{
+	font-size: .5em;
+	margin:1em 0;
+}
+/*******************************登录界面CSS结束*****************************/
+.clearfix:after{
+	content:'.';
+	display:block;
+	height:0;
+	visibility:bidden;
+	clear:both;
+}
+/*******************************内容界面CSS********************************/
+#select-content{
+	height:100%;
+	z-index: 6;
+	width:100%;
+	position:absolute;
+	top:0px;
+	left:0px;
+	transform:translate3d(-100%,0,0);
+	transition:all 250ms ease-in-out;/*CSS效果改变时间：250ms 匀速改变*/
+	background-color: white;
+	overflow: auto;
+}
+#select-content.moved{
+	transform:translate3d(0,0,0);
+}
+#select-content h2{
+	width:50%;
+	font-weight: bold;
+	font-size: .8em;
+	padding: 1.5em 1em;
+	margin:0;
+	background-color:white;
+	z-index: 5;
+}
+#select-content h2 span{
+	color:#DF2828;
+}
+#channels-select {
+	display:none;
+	font-size: .8em;
+	width:5em;
+	background-color: #DF2828;
+	border-radius: 10%;
+	height:2em;
+	position:absolute;
+	top:0px;
+	right:5px;
+	color: #FFFFFF;
+}
+#channels-select.visible {
+	display:block;
+}
+
+.subcontent{
+	z-index: 2;
+	position:relative;
+	height:100px;
+	transition:all 1000ms ease-in-out;/*CSS效果改变时间：250ms 匀速改变*/
+}
+.subcontent h3{
+	width:114px;
+	color:white;
+	padding:.5em 1em;
+	margin:0 auto;
+	position:relative;
+	top:33px;
+	text-align: center;
+}
+
+#channels li:nth-child(1) .subcontent{
+	background-image:url('../img/moon.jpg');
+	background-position: 50% 66%;
+}
+#channels li:nth-child(1) .checked{
+	background-color: #2F5EE6;
+	background-image:none;
+}
+#channels li:nth-child(1) .subcontent h3{
+	background-color: #2F5EE6;
+}
+#channels li:nth-child(1) .submenu{
+	background-color: #2F5EE6;
+}
+
+#channels li:nth-child(2) .subcontent{
+	background-image:url('../img/art.jpg');
+	background-position: 50% 66%;
+}
+#channels li:nth-child(2) .subcontent.checked{
+	background-color: #F34462;
+	background-image:none;
+}
+#channels li:nth-child(2) .subcontent h3{
+	background-color: #F34462;
+}
+#channels li:nth-child(2) .submenu{
+	background-color: #F34462;
+}
+
+#channels li:nth-child(3) .subcontent{
+	background-image:url('../img/life.jpg');
+	background-position: 50% 66%;
+}
+#channels li:nth-child(3) .subcontent.checked{
+	background-color: #CA5B00;
+	background-image:none;
+}
+#channels li:nth-child(3) .subcontent h3{
+	background-color: #CA5B00;
+}
+#channels li:nth-child(3) .submenu{
+	background-color: #CA5B00;
+}
+
+#channels li:nth-child(4) .subcontent{
+	background-image:url('../img/sports.jpg');
+	background-position: 50% 66%;
+}
+#channels li:nth-child(4) .subcontent.checked{
+	background-color: green;
+	background-image:none;
+}
+#channels li:nth-child(4) .subcontent h3{
+	background-color: green;
+}
+#channels li:nth-child(4) .submenu{
+	background-color: green;
+}
+
+#channels li:nth-child(5) .subcontent{
+	background-image:url('../img/food.jpg');
+	background-position: 50% 66%;
+}
+#channels li:nth-child(5) .subcontent.checked{
+	background-color: orange;
+	background-image:none;
+}
+#channels li:nth-child(5) .subcontent h3{
+	background-color: orange;
+}
+#channels li:nth-child(5) .submenu{
+	background-color: orange;
+}
+
+#channels li:nth-child(6) .subcontent{
+	background-image:url('../img/entertainment.jpg');
+	background-position: 50% 50%;
+}
+#channels li:nth-child(6) .subcontent.checked{
+	background-color: purple;
+	background-image:none;
+}
+#channels li:nth-child(6) .subcontent h3{
+	background-color: purple;
+}
+#channels li:nth-child(6) .submenu{
+	background-color: purple;
+}
+
+#channels li:nth-child(7) .subcontent{
+	background-image:url('../img/camera.jpg');
+	background-position: 50% 0%;
+}
+#channels li:nth-child(7) .subcontent.checked{
+	background-color: #FF0003;
+	background-image:none;
+}
+#channels li:nth-child(7) .subcontent h3{
+	background-color: #FF0003;
+}
+#channels li:nth-child(7) .submenu{
+	background-color: #FF0003;
+}
+
+#channels li:nth-child(8) .subcontent{
+	background-image:url('../img/business.jpg');
+	background-position: 50% 0%;
+}
+#channels li:nth-child(8) .subcontent.checked{
+	background-color: #008272;
+	background-image:none;
+}
+#channels li:nth-child(8) .subcontent h3{
+	background-color: #008272;
+}
+#channels li:nth-child(8) .submenu{
+	background-color: #008272;
+}
+
+#channels li:nth-child(9) .subcontent{
+	background-image:url('../img/exercise.jpg');
+	background-position: 100% 0%;
+}
+#channels li:nth-child(9) .subcontent.checked{
+	background-color: #820019;
+	background-image:none;
+}
+#channels li:nth-child(9) .subcontent h3{
+	background-color: #820019;
+}
+#channels li:nth-child(9) .submenu{
+	background-color: #820019;
+}
+#channels li:nth-child(10) .subcontent{
+	background-image:url('../img/artist.jpg');
+	background-position: 50% 0%;
+}
+#channels li:nth-child(10) .subcontent.checked{
+	background-color: #1E0082;
+	background-image:none;
+}
+#channels li:nth-child(10) .subcontent h3{
+	background-color: #1E0082;
+}
+
+#channels li:nth-child(10) .submenu{
+	background-color: #1E0082;
+}
+
+.subcontent p{
+	font-size:7pt;
+	color:white;
+	width:60px;
+	margin:0 auto;
+	position:relative;
+	top:50px;
+}
+.subcontent .select-btn{
+	width:20px;
+	height:20px;
+	position:absolute;
+	top:35px;
+	right:15px;
+	border:2px solid white;
+	border-radius: 10px;
+	background:none;
+}
+.subcontent .select-btn.clicked{
+	background-image: url("../img/check.png");
+	border:none;
+}
+
+.menu-info .on,
+.menu-info.enable .off {
+	display: none;
+}
+
+
+.menu-info.enable .on,
+.menu-info .off {
+	display: block;
+}
+
+.submenu{
+	z-index:1;
+	transform:translate3d(0,-100%,0);
+	transition:all 250ms ease-in-out;/*CSS效果改变时间：250ms 匀速改变*/
+	display:none;
+	overflow-x:auto;
+	overflow-y:hidden;
+}
+.submenu p{
+	color:white;
+}
+.submenu.fliped{
+	transform:translate3d(0,0,0);
+	display:block;
+}
+.submenu ul li{
+	display:inline-block;
+	width:90px;	
+}
+.submenu ul li img{
+	display:block;
+	margin:0 auto;	
+	padding-top:15px;
+	padding-bottom:5px;
+	max-width: 50px;
+	max-height: 50px;
+	border-radius: 10%;
+}
+
+.submenu ul li p{
+	text-align: center;
+	font-size:8px;
+	padding-bottom:15px;
+}
+
+/********************************交互区****************************/
+
+#recommend_channels{
+	height:100%;
+	z-index: 10;
+	width:100%;
+	position:absolute;
+	top:0px;
+	left:0px;
+	transform:translate3d(-100%,0,0);
+	transition:all 250ms ease-in-out;/*CSS效果改变时间：250ms 匀速改变*/
+	background-color: white;
+	overflow: auto;
+}
+
+#recommend_channels.moved{
+	transform:translate3d(0,0,0);
+}
+#recommend_channels h2{
+	float:left;
+	width:50%;
+	font-weight: bold;
+	font-size: .8em;
+	padding:1em 0em 1em 1em;
+	margin:0;
+	background-color:white;
+	z-index: 5;
+}
+#exit_home{
+	float:right;
+	display:block;
+	font-size: .8em;
+	width:5em;
+	background-color: #DF2828;
+	border-radius: 10%;
+	height:2em;
+	color: #FFFFFF;
+}
+#logname {
+	font-size: .8em;
+	padding:10px;
+	float:right;
+	margin-top: 5px;
+	margin-right: 10px;
+}
+
+#channelName {
+	padding: 1em;
+	font-size: .8em;
+}
+
+#channelName p, #channelName li {
+	line-height: 1.5em;
+}
+
+#channelName .title {
+	font-weight: bold;
+}
+
+#channelName ul {
+	margin-bottom: 20px;
+}

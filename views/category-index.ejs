@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Category Index</title>
+	<meta name="viewport" content = "width=device-width,initial-scale=1,maximum-scale=1">
+	<style>
+		body { font-size: 1pt; }
+		ul { overflow: hidden;zoom:1; padding: 0; }
+		li { float: left; margin-right : 10pt; text-align: center; list-style: none; }
+		img { max-width: 80px; max-height : 50px; border-radius: 20%; }
+	</style>
+	<script src="/js/jquery-3.1.0.min.js"></script>
+	<script>
+		$( document ).ready(function() {
+			// request category JSON and render in the DOM
+			$.getJSON( "/category-list", function( data ) { 
+				var list  = data;
+				$.each(list.feed, function (index, value) { 
+
+					// create the virtual DOM wrapper
+					var virtualDOM = $("<div />", {
+						"class" : "category",
+						"id" : "s_" + index,
+						"html" : "<strong>类别：</strong>" + value.catagory
+					}).append("<ul></ul><hr />");
+
+					// create DOM with web list 
+					$.each(value.site, function( i, v ) {
+						$("<a />", {
+							"target" : "_blank",
+							"href" : v.url,
+							"html" : "<p><img src='" + v.icon + "'/>" + " </p>" + v.name
+						}).appendTo($("ul", virtualDOM)).wrap("<li></li>");						
+					});
+
+					// insert into right place at one time
+					virtualDOM.appendTo("#con");
+				})
+			});
+		});
+	</script>
+</head>
+<body>
+	<div id="con">
+		<div><a href="/category-create">添加新类别</a><hr /></div>
+	</div>
+</body>
+</html>

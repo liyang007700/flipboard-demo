@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8"/>
+	<meta name="viewport" content = "width=device-width,initial-scale=1,maximum-scale=1">
+	<title>flipboard</title>
+	<link rel="stylesheet" type="text/css" href="/css/reset.css">
+	<link rel="stylesheet" type="text/css" href="/css/main.css">
+	<script type="text/javascript" src = "/js/jquery-3.1.0.min.js"></script>
+	<script type="text/javascript" src = "/js/jquery.touchSwipe.min.js"></script>
+</head>
+<body>
+	<div id = "cover">
+		<div id = "box">
+			<img src="/img/flipboard.png" alt = "flipLOGO" width = "100px" height = "100px"/>
+			<p id = "btn-Login">登录</p>
+			<div id = "content-box">
+				<h1>Flipboard</h1>
+				<p id = "zh-flip">你的专属杂志</p>
+			</div>
+			<button id = "toMenu-btn">开始使用</button>
+		</div>
+	</div>
+	<div class = "slide-wrapper">
+		<div id = "back"><img src="/img/back.png"/></div>
+		<div class = "container">
+			<form method = "post" action = "http://localhost:3000/">
+				<h2 class = "form-title">登录</h2>
+				<p class = "hint-user">用户名或邮箱</p>
+				<p class = "row">
+					<input type="text" name="username" id = "username" placeholder="用户名或者邮箱"  autofocus autocomplete="off" />
+				</p>
+				<p class = "hint-pwrd">密码</p>
+				<p class = "row">
+					<input type="password" name="password" id = "pwrd" placeholder="密码" autocomplete="off" autofocus />
+				</p>
+				<p id = "submit">
+					<button type = "submit">登录</button>
+				</p>
+			</form>	
+			<div id = "login-info">——————或通过以下方式登录——————</div>
+			<div id = "wx-login"><p>微信</p></div>			
+			<p id = "login-help">忘记用户名或者密码？</p>	
+		</div>	
+	</div>
+	<div id = "select-content">
+		<h2>请选择您的兴趣（<span>2</span>个以上）</h2>
+		<button id = "channels-select">开始</button>
+		<ul id = "channels"></ul>
+	</div>
+	<div id = "recommend_channels" >
+		<div class = "clearfix">
+			<h2>我们为您推荐的内容：</h2>
+			<button id = "exit_home" >点击退出</button>
+			<p id = "logname" >未注册用户</p>
+		</div>
+		<div id = "channelName"></div>
+	</div>
+
+<script type="text/javascript">
+$(function(){
+	/****************************************************/
+	/*左边滑出登录界面*/
+	$('#btn-Login').on("click",function(e){
+		$('.slide-wrapper').addClass('moved');
+	});
+
+	/*在登录界面手势向左滑动，回到主界面*/
+	$('.slide-wrapper').swipe({
+		swipeLeft:function(){
+			$(this).removeClass('moved');
+		},
+		threshold:100
+	});
+	/*在登录界面，点击返回图标，回到主界面*/
+	$(".slide-wrapper #back").on('click',function(e){
+		$(".slide-wrapper").removeClass('moved');
+	});
+	/****************************************************/
+
+	/*在登录界面，输入用户名字和密码，分别上滑出提示信息，输出无输入，提示信息隐藏 填写完毕提交按钮常亮*/
+	var user_info = {
+						"user_name": "",
+					 	"user_pwrd": ""
+					 };
+	$('#username').on('input propertychange',function(e){
+		$('.hint-user').addClass('input');
+		if($('#username').val() == ''){
+			$('.hint-user').removeClass('input');
+		}
+		user_info.user_name = $('#username').val();
+	});
+	$('#pwrd').on('input propertychange',function(e){
+		$('.hint-pwrd').addClass('input');
+		if($('#pwrd').val() == ''){
+			$('.hint-pwrd').removeClass('input');
+		}
+		if((user_info.user_name != "")&&(user_info.user_pwrd != "")){
+			$('button').addClass('ready');
+		}
+		user_info.user_pwrd = $('#pwrd').val();
+	});	
+
+	$('#submit button').on('click',function(e){
+		e.preventDefault();
+
+
+		if((user_info.user_name != "")&&(user_info.user_pwrd != "")){
+
+			$.ajax({
+				method: "POST",
+				url: "/login",
+				beforeSend: function(xhr) {
+					$("#submit button").html("登录中...");
+				},
+				data: user_info
+			})
+			.done(function( msg ) {
+				$("#submit button").html("登录");
+				$('.slide-wrapper').removeClass('moved');
+				$('#select-content').addClass('moved');
+				$("#logname").html("欢迎您 " + msg.user)
+				$("#select-content h2").prepend(msg.user + ", ");
+			});
+
+		}
+		else{
+			alert("登陆信息不完整");
+		}
+		console.log(user_info);	
+	});
+
+	/****************************内容区代码*******************************/
+	/*内容选择界面代码*/
+	/*点击主界面“开始使用”按钮，左边弹出内容区*/
+	$('#box button').on('click',function(e){
+		$('#select-content').addClass('moved');
+	});
+	$('#select-content').swipe({
+		swipeLeft:function(){
+			$("#select-content").removeClass('moved');
+		},
+		threshold:100
+	});
+
+	/*点击为你订阅，飞出submenu
+	  如果子li项过多，扩展ul宽度，以出现横向滚动条安放所有的li*/
+	$('#select-content').delegate('.menu-info','click',function(e){
+		$(this).toggleClass('enable').parent().parent().find('.submenu').toggleClass('fliped');
+		var submenuWidth = ($(this).parent().parent().find('li').length)*($(this).parent().parent().find('li').width() + 5);
+		if(window.screen.width < submenuWidth){
+			$(this).parent().parent().find('ul').width(submenuWidth);
+		}
+	});
+
+	/*用户选择的频道*/
+	var user_channels = {
+							"channelselect_id" :[]   };
+	/*内容区每一项的勾选*/
+	$('#select-content').delegate('#channels .select-btn','click',function(e){
+		$(this).toggleClass("clicked");//点击此按钮，改变按钮样式
+		$(this).parent().toggleClass("checked");//改变父容器的样式
+		/*将被选中的li子项的id值名称写进data.content-selected数组，或者移除*/
+	    if($(this).hasClass("clicked")){
+	    	user_channels.channelselect_id.push( {
+	    		id : $(this).parent().parent().attr("data-id")
+	    	}
+    		);
+	    }
+	    else {user_channels.channelselect_id.pop();}
+	    /*根据选中li子项的数量，决定是否有进入下一个界面的按钮*/
+	    if(user_channels.channelselect_id.length >= 2){
+	   		  $("#channels-select").addClass("visible");  	
+	    }
+	    else {
+	    	  $("#channels-select").removeClass("visible");
+	    }
+	});
+
+	/*点击内容页面的右上角红色提交按钮，通过ajax发送data给后台*/
+	$('#select-content').delegate('#channels-select','click',function(e){
+		//$.post("http://localhost:3000/",user_channels,function(resp){});
+		$.ajax({
+			async:true,
+			url:"/picker-save",//?????????????????????????????????????????????????????????
+			type:'POST',
+			data:user_channels,
+			dataType:'json',
+			timeout:30000,
+			success: function(data){
+
+				$.each(data.feed, function(index,value) {
+					var p = $("<p class='title'></p>");
+					var ul = $("<ul></ul>");//列表容器
+					p.text(value.catagory);
+
+					$.each( value.list, function(index,value) {
+						var li = $("<li></li>");//列表容器
+						$("<a />", {
+							"target" : "_blank",
+							"html" : value.title,
+							"href" : value.url
+						}).appendTo(li);
+						li.appendTo(ul);
+					});					
+
+					$("#channelName").append(p).append(ul);		
+				});
+			},
+			error: function(){
+				console.log("failed!");
+			}
+
+		});
+		$('#select-content').removeClass('moved');
+		$('#recommend_channels').addClass('moved');
+	});
+	
+	/*动态生成#select-content的内容区，然后append给select-content*/	
+	$.getJSON( "/category-list", function( data ){ 
+		var list  = data;
+		console.log(data);
+		$.each(list.feed, function (index, value) { 
+			var li = $("<li></li>");//列表容器
+			var p = $("<p class = \"menu-info\"><span class=\"off\">>为你订阅</span><span class=\"on\">^点击收起</span></p>");
+			var button = $("<button class = \"select-btn\"></button>");
+			var div_subcontent = $("<div class = \"subcontent\"></div>");
+			var UL_submenu = $("<ul></ul>");
+			var div_submenu = $("<div class = \"submenu\"></div>");
+			$("<h3 />", {
+				"html" : value.catagory
+			}).appendTo(div_subcontent);			
+			p.appendTo(div_subcontent);
+			button.appendTo(div_subcontent);
+
+			$.each(value.site, function( i, v ) {
+				var li = $("<li></li>");
+				$("<img />", {
+					"src" : v.icon,
+					"class" : "submenu-list-img"
+					}).appendTo(li);	
+				$("<p />", {
+					"html" : v.name,
+					"class" : "submenu-list-title"
+				}).appendTo(li);
+				li.appendTo(UL_submenu);									
+			});
+
+			UL_submenu.appendTo(div_submenu);
+			div_subcontent.appendTo(li);
+			div_submenu.appendTo(li);
+			li.attr("data-id",value._id);
+			li.appendTo("#channels");
+		});
+	});
+
+	/*recommend_channels页按退出登录按钮回到首页*/
+	$("#exit_home").on("click",function(e){
+		$('#recommend_channels').removeClass('moved');
+	});
+});
+</script>
+</body>
+</html>
