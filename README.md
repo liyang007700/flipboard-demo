@@ -1,10 +1,10 @@
 "# flipboard-demo" 
 
 Demo link:
-http://yourflipboard.applinzi.com/
+http://flipboard.mybluemix.net/
 
 Admin: create new category
-http://yourflipboard.applinzi.com/category-create
+http://flipboard.mybluemix.net/category-create
 
 Admin: list all category
-http://yourflipboard.applinzi.com/category-index
+http://flipboard.mybluemix.net/category-index
