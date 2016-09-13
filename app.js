@@ -2,8 +2,11 @@ var express = require("express");
 var app = express();
 var bodyParser = require("body-parser");
 var MongoClient = require("mongodb").MongoClient;
-var mongoUrl = "mongodb://liyang:liyang007@ds021016.mlab.com:21016/flipbroad";
-var db;
+var db, env;
+
+if (process.env.NODE_ENV === "dev") { env = require('node-env-file')(__dirname + '/.env'); }
+
+var mongoUrl = process.env.env_var_name || process.env.mongodb_auth;
 
 app.set("view engine", "ejs");//模板渲染引擎设置为ejs
 
@@ -12,7 +15,7 @@ app.use(express.static(__dirname + '/public'));
 MongoClient.connect(mongoUrl, function(err, database) {
 	if (err) return console.log("error : " + err);
 	db = database;
-	app.listen( process.env.PORT || 5050, function() {
+	app.listen( process.env.PORT || 80, function() {
 		console.log("server started");
 	});
 });
