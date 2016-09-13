@@ -4,9 +4,10 @@ var bodyParser = require("body-parser");
 var MongoClient = require("mongodb").MongoClient;
 var db, env;
 
-if (process.env.NODE_ENV === "dev") { env = require('node-env-file')(__dirname + '/.env'); }
+if (!process.env.NODE_ENV) { env = require('node-env-file')(__dirname + '/.env'); }
 
-var mongoUrl = process.env.env_var_name || process.env.mongodb_auth;
+var mongoUrl = process.env.bluemix_mongo_connection || process.env.mongodb_auth;
+
 
 app.set("view engine", "ejs");//模板渲染引擎设置为ejs
 
@@ -15,7 +16,7 @@ app.use(express.static(__dirname + '/public'));
 MongoClient.connect(mongoUrl, function(err, database) {
 	if (err) return console.log("error : " + err);
 	db = database;
-	app.listen( process.env.PORT || 80, function() {
+	app.listen( process.env.VCAP_APP_PORT || 80, function() {
 		console.log("server started");
 	});
 });
@@ -48,7 +49,6 @@ app.post("/login", function(req, res) {
 // router for save user behavior and resposne with relevant contents
 app.post("/picker-save", function(req, res) {
 	// save user behavior first 
-	// oh, escape this due to lack of time :-(
 	// then retreive related content with selected categories and send back thru json
 	var cursor = db.collection("content").find({"$or":req.body.channelselect_id });//.sort({"_id": 1});
 	cursor.toArray(function(err, results) {
