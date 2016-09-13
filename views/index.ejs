@@ -48,17 +48,62 @@
 		<button id = "channels-select">开始</button>
 		<ul id = "channels"></ul>
 	</div>
-	<div id = "recommend_channels" >
-		<div class = "clearfix">
-			<h2>我们为您推荐的内容：</h2>
-			<button id = "exit_home" >点击退出</button>
-			<p id = "logname" >未注册用户</p>
+	<div id = "homepage">
+			<nav role = "navigation">
+				<ul>
+					<li id = "content-nav"><img src="/img/home-grey.png" /></li>
+					<li id = "channels-nav"><img src="/img/menu-grey.png" /></li>
+					<li id = "search-nav"><img src="/img/search-grey.png" /></li>
+					<li id = "notification-nav"><img src="/img/ring-grey.png" /></li>
+					<li id = "userinfo-nav"><img src="/img/user-grey.png" /></li>
+				</ul>
+			</nav>
+			<div id = "homepage-content" class = "clearfix">
+				<div id = "no1">
+					<div id = "no1-container">
+						
+					</div>
+				</div>
+				<div id = "no2">
+					<p>为您推荐：</p>
+					
+				</div>
+				<div id = "no3">
+					<div id = "no3-container">
+						<div id = "search_click">
+							<img src="img/search-grey.png"/><span>想看什么？来这里找</span>
+						</div>
+						<p>大家都在看</p>
+
+						<div id = "search_page">
+							<div id = "search_bar">
+								<img src="img/ArrowBack.png"/>
+								<input type="search" placeholder="想看什么？在这里找。。。" />
+							</div>
+							<div id = "search_result">
+								<!--这里根据搜索框提交的内容，从数据库拿出数据显示 -->
+							</div>
+						</div>
+					</div>
+				</div>
+				<div id = "no4">
+					<p>没有收到通知-当有人关注您、点赞、评论或重新收集您所收集的内容时，您将会在这里看到。</p>
+				</div>
+				<div id = "no5">
+					此功能维护中，造成不便敬请谅解.
+				</div>
+			</div>
 		</div>
-		<div id = "channelName"></div>
-	</div>
+	
 
 <script type="text/javascript">
 $(function(){
+	var deviceWidth = window.screen.width;
+	var deviceHeight = window.screen.height;
+	console.log("deviceWidth : " + deviceWidth);
+	console.log("deviceHeight : " + deviceHeight);
+	$("body").width(deviceWidth);
+	$("body").height(deviceHeight);
 	/****************************************************/
 	/*左边滑出登录界面*/
 	$('#btn-Login').on("click",function(e){
@@ -100,13 +145,10 @@ $(function(){
 		}
 		user_info.user_pwrd = $('#pwrd').val();
 	});	
-
+	//登录界面按钮
 	$('#submit button').on('click',function(e){
 		e.preventDefault();
-
-
 		if((user_info.user_name != "")&&(user_info.user_pwrd != "")){
-
 			$.ajax({
 				method: "POST",
 				url: "/login",
@@ -119,10 +161,9 @@ $(function(){
 				$("#submit button").html("登录");
 				$('.slide-wrapper').removeClass('moved');
 				$('#select-content').addClass('moved');
-				$("#logname").html("欢迎您 " + msg.user)
+				//$("#logname").html("欢迎您 " + msg.user);//第四页被更改。
 				$("#select-content h2").prepend(msg.user + ", ");
 			});
-
 		}
 		else{
 			alert("登陆信息不完整");
@@ -154,8 +195,7 @@ $(function(){
 	});
 
 	/*用户选择的频道*/
-	var user_channels = {
-							"channelselect_id" :[]   };
+	var user_channels = {"channelselect_id" :[]};
 	/*内容区每一项的勾选*/
 	$('#select-content').delegate('#channels .select-btn','click',function(e){
 		$(this).toggleClass("clicked");//点击此按钮，改变按钮样式
@@ -177,49 +217,61 @@ $(function(){
 	    }
 	});
 
-	/*点击内容页面的右上角红色提交按钮，通过ajax发送data给后台*/
+	/*点击内容页面的右上角红色提交按钮，通过ajax发送data给后台，然后后台返回与之相关联的内容，渲染第四页的内容区（第四页被更改，这部分也需要更改）*/
 	$('#select-content').delegate('#channels-select','click',function(e){
 		//$.post("http://localhost:3000/",user_channels,function(resp){});
 		$.ajax({
 			async:true,
-			url:"/picker-save",//?????????????????????????????????????????????????????????
+			url:"/picker-save",
 			type:'POST',
-			data:user_channels,
+			data:user_channels,//用户选择的频道提交
 			dataType:'json',
 			timeout:30000,
 			success: function(data){
-
-				$.each(data.feed, function(index,value) {
-					var p = $("<p class='title'></p>");
-					var ul = $("<ul></ul>");//列表容器
-					p.text(value.catagory);
-
-					$.each( value.list, function(index,value) {
-						var li = $("<li></li>");//列表容器
-						$("<a />", {
-							"target" : "_blank",
-							"html" : value.title,
-							"href" : value.url
-						}).appendTo(li);
-						li.appendTo(ul);
-					});					
-
-					$("#channelName").append(p).append(ul);		
+				var valuecounter = 0;
+				$.each(data.feed,function( index, value){
+					valuecounter++;
+					$.each(value.newslist,function(index,value){
+						var id = index + 1 + (valuecounter-1)*4;
+						var top = index + (valuecounter-1)*4;
+					var div = $("<div />",{
+						"id" : "no1-page" + id
+					});
+					var img = $("<img />",{
+						"src" : value.imgUrl
+					});
+					var a = $("<a />",{
+						"href": value.URL,
+						"target":"_blank"
+					}).append(img);
+					var h3 = $("<h3 />", {
+						"html" : value.title
+					});	
+					var p = $("<p />",{
+						"html" : value.overview
+					});
+					img.css("max-width","100%");
+					h3.css({"margin":".5em 0","font-size":"1.5em","padding":"0 .5em 0 .5em"});
+					p.css({"padding":"0 .5em"});		
+					div.append(a).append(h3).append(p);
+					div.css({"width":"100%","height":"100%","position":"absolute","left":"0px","top":top + "00%"});
+					$("#no1-container").append(div);
 				});
-			},
+					
+			});
+		},
 			error: function(){
 				console.log("failed!");
 			}
 
 		});
 		$('#select-content').removeClass('moved');
-		$('#recommend_channels').addClass('moved');
+		$("#homepage").addClass('moved');
 	});
-	
+	var subcontent_BGP = [];
 	/*动态生成#select-content的内容区，然后append给select-content*/	
 	$.getJSON( "/category-list", function( data ){ 
 		var list  = data;
-		console.log(data);
 		$.each(list.feed, function (index, value) { 
 			var li = $("<li></li>");//列表容器
 			var p = $("<p class = \"menu-info\"><span class=\"off\">>为你订阅</span><span class=\"on\">^点击收起</span></p>");
@@ -229,7 +281,7 @@ $(function(){
 			var div_submenu = $("<div class = \"submenu\"></div>");
 			$("<h3 />", {
 				"html" : value.catagory
-			}).appendTo(div_subcontent);			
+			}).appendTo(div_subcontent);		
 			p.appendTo(div_subcontent);
 			button.appendTo(div_subcontent);
 
@@ -245,18 +297,312 @@ $(function(){
 				}).appendTo(li);
 				li.appendTo(UL_submenu);									
 			});
-
 			UL_submenu.appendTo(div_submenu);
 			div_subcontent.appendTo(li);
 			div_submenu.appendTo(li);
 			li.attr("data-id",value._id);
 			li.appendTo("#channels");
+			subcontent_BGP.push(value.BGP);
 		});
 	});
-
+/************************************homepage js****************************/
 	/*recommend_channels页按退出登录按钮回到首页*/
-	$("#exit_home").on("click",function(e){
-		$('#recommend_channels').removeClass('moved');
+	$("#homepage nav ul li").width(deviceWidth/5);//目录元素并排在上部
+	/****************************内容容器排在下部*******************************/
+	$("#homepage-content").height(deviceHeight-54);
+	$("#homepage-content").width(deviceWidth);
+/***************************************************************************/
+	var translatenow = "translate(0px,0px) translateZ(0px)";//现在呈现homepage content的坐标
+	var translatenext1 = "translate(" + deviceWidth +"px,0px) translateZ(0px)";//五个子部分左边第一个坐标
+	var translatenext2 = "translate(" + deviceWidth*2 +"px,0px) translateZ(0px)";//五个子部分左边第二个坐标
+	var translatenext3 = "translate(" + deviceWidth*3 +"px,0px) translateZ(0px)";//五个子部分左边第三个坐标
+	var translatenext4 = "translate(" + deviceWidth*4 +"px,0px) translateZ(0px)";//五个子部分左边第四个坐标
+	var translatebefore1 = "translate(-" + deviceWidth + "px,0px) translateZ(0px)";//五个子部分右边第一个坐标
+	var translatebefore2 = "translate(-" + deviceWidth*2 + "px,0px) translateZ(0px)";//五个子部分右边第二个坐标
+	var translatebefore3 = "translate(-" + deviceWidth*3 + "px,0px) translateZ(0px)";//五个子部分右边第三个坐标
+	var translatebefore4 = "translate(-" + deviceWidth*4 + "px,0px) translateZ(0px)";//五个子部分右边第四个坐标
+/****************************************页面刚加载**********************************/
+	$("#no1").css("transform",translatenow);
+	$("#no2").css("transform",translatenext1);
+	$("#no3").css("transform",translatenext2);
+	$("#no4").css("transform",translatenext3);
+	$("#no5").css("transform",translatenext4);
+
+	$("#content-nav img").attr("src","img/home-red.png");
+	$("#channels-nav img").attr("src","img/menu-grey.png");
+	$("#search-nav img").attr("src","img/search-grey.png");
+	$("#notification-nav img").attr("src","img/ring-grey.png");
+	$("#userinfo-nav img").attr("src","img/user-grey.png");
+/***********************************点击nav或者滑动内容区切换**********************/
+	$("#content-nav").on("click",function(e){
+		$("#content-nav img").attr("src","img/home-red.png");
+		$("#channels-nav img").attr("src","img/menu-grey.png");
+		$("#search-nav img").attr("src","img/search-grey.png");
+		$("#notification-nav img").attr("src","img/ring-grey.png");
+		$("#userinfo-nav img").attr("src","img/user-grey.png");
+		$("#no1").css("transform",translatenow);
+		$("#no2").css("transform",translatenext1);
+		$("#no3").css("transform",translatenext2);
+		$("#no4").css("transform",translatenext3);
+		$("#no5").css("transform",translatenext4);
+	});
+	$('#no1').swipe({
+		swipeLeft:function(){
+			$("#content-nav img").attr("src","img/home-grey.png");
+			$("#channels-nav img").attr("src","img/menu-red.png");
+			$("#search-nav img").attr("src","img/search-grey.png");
+			$("#notification-nav img").attr("src","img/ring-grey.png");
+			$("#userinfo-nav img").attr("src","img/user-grey.png");
+			$("#no1").css("transform",translatebefore1);
+			$("#no2").css("transform",translatenow);
+			$("#no3").css("transform",translatenext1);
+			$("#no4").css("transform",translatenext2);
+			$("#no5").css("transform",translatenext3);
+		},
+		threshold:100
+	});
+	$("#channels-nav").on("click",function(e){
+		$("#content-nav img").attr("src","img/home-grey.png");
+		$("#channels-nav img").attr("src","img/menu-red.png");
+		$("#search-nav img").attr("src","img/search-grey.png");
+		$("#notification-nav img").attr("src","img/ring-grey.png");
+		$("#userinfo-nav img").attr("src","img/user-grey.png");
+		$("#no1").css("transform",translatebefore1);
+		$("#no2").css("transform",translatenow);
+		$("#no3").css("transform",translatenext1);
+		$("#no4").css("transform",translatenext2);
+		$("#no5").css("transform",translatenext3);
+	});
+	$('#no2').swipe({
+		swipeRight:function(){
+			$("#content-nav img").attr("src","img/home-red.png");
+			$("#channels-nav img").attr("src","img/menu-grey.png");
+			$("#search-nav img").attr("src","img/search-grey.png");
+			$("#notification-nav img").attr("src","img/ring-grey.png");
+			$("#userinfo-nav img").attr("src","img/user-grey.png");
+			$("#no1").css("transform",translatenow);
+			$("#no2").css("transform",translatenext1);
+			$("#no3").css("transform",translatenext2);
+			$("#no4").css("transform",translatenext3);
+			$("#no5").css("transform",translatenext4);
+		},
+		threshold:100
+	});
+	$('#no2').swipe({
+		swipeLeft:function(){
+			$("#content-nav img").attr("src","img/home-grey.png");
+			$("#channels-nav img").attr("src","img/menu-grey.png");
+			$("#search-nav img").attr("src","img/search-red.png");
+			$("#notification-nav img").attr("src","img/ring-grey.png");
+			$("#userinfo-nav img").attr("src","img/user-grey.png");
+			$("#no1").css("transform",translatebefore2);
+			$("#no2").css("transform",translatebefore1);
+			$("#no3").css("transform",translatenow);
+			$("#no4").css("transform",translatenext1);
+			$("#no5").css("transform",translatenext2);
+		},
+		threshold:100
+	});
+	$("#search-nav").on("click",function(e){
+		$("#content-nav img").attr("src","img/home-grey.png");
+		$("#channels-nav img").attr("src","img/menu-grey.png");
+		$("#search-nav img").attr("src","img/search-red.png");
+		$("#notification-nav img").attr("src","img/ring-grey.png");
+		$("#userinfo-nav img").attr("src","img/user-grey.png");
+		$("#no1").css("transform",translatebefore2);
+		$("#no2").css("transform",translatebefore1);
+		$("#no3").css("transform",translatenow);
+		$("#no4").css("transform",translatenext1);
+		$("#no5").css("transform",translatenext2);
+	});
+	$('#no3').swipe({
+		swipeRight:function(){
+			$("#content-nav img").attr("src","img/home-grey.png");
+			$("#channels-nav img").attr("src","img/menu-red.png");
+			$("#search-nav img").attr("src","img/search-grey.png");
+			$("#notification-nav img").attr("src","img/ring-grey.png");
+			$("#userinfo-nav img").attr("src","img/user-grey.png");
+			$("#no1").css("transform",translatebefore1);
+			$("#no2").css("transform",translatenow);
+			$("#no3").css("transform",translatenext1);
+			$("#no4").css("transform",translatenext2);
+			$("#no5").css("transform",translatenext3);
+		},
+		threshold:100
+	});
+	$('#no3').swipe({
+		swipeLeft:function(){
+			$("#content-nav img").attr("src","img/home-grey.png");
+			$("#channels-nav img").attr("src","img/menu-grey.png");
+			$("#search-nav img").attr("src","img/search-grey.png");
+			$("#notification-nav img").attr("src","img/ring-red.png");
+			$("#userinfo-nav img").attr("src","img/user-grey.png");
+			$("#no1").css("transform",translatebefore3);
+			$("#no2").css("transform",translatebefore2);
+			$("#no3").css("transform",translatebefore1);
+			$("#no4").css("transform",translatenow);
+			$("#no5").css("transform",translatenext1);
+		},
+		threshold:100
+	});
+	$("#notification-nav").on("click",function(e){
+		$("#content-nav img").attr("src","img/home-grey.png");
+		$("#channels-nav img").attr("src","img/menu-grey.png");
+		$("#search-nav img").attr("src","img/search-grey.png");
+		$("#notification-nav img").attr("src","img/ring-red.png");
+		$("#userinfo-nav img").attr("src","img/user-grey.png");
+		$("#no1").css("transform",translatebefore3);
+		$("#no2").css("transform",translatebefore2);
+		$("#no3").css("transform",translatebefore1);
+		$("#no4").css("transform",translatenow);
+		$("#no5").css("transform",translatenext1);
+	});
+	$('#no4').swipe({
+		swipeRight:function(){
+			$("#content-nav img").attr("src","img/home-grey.png");
+			$("#channels-nav img").attr("src","img/menu-grey.png");
+			$("#search-nav img").attr("src","img/search-red.png");
+			$("#notification-nav img").attr("src","img/ring-grey.png");
+			$("#userinfo-nav img").attr("src","img/user-grey.png");
+			$("#no1").css("transform",translatebefore2);
+			$("#no2").css("transform",translatebefore1);
+			$("#no3").css("transform",translatenow);
+			$("#no4").css("transform",translatenext1);
+			$("#no5").css("transform",translatenext2);
+		},
+		threshold:100
+	});
+	$('#no4').swipe({
+		swipeLeft:function(){
+			$("#content-nav img").attr("src","img/home-grey.png");
+			$("#channels-nav img").attr("src","img/menu-grey.png");
+			$("#search-nav img").attr("src","img/search-grey.png");
+			$("#notification-nav img").attr("src","img/ring-grey.png");
+			$("#userinfo-nav img").attr("src","img/user-red.png");
+			$("#no1").css("transform",translatebefore4);
+			$("#no2").css("transform",translatebefore3);
+			$("#no3").css("transform",translatebefore2);
+			$("#no4").css("transform",translatebefore1);
+			$("#no5").css("transform",translatenow);
+		},
+		threshold:100
+	});
+
+	$("#userinfo-nav").on("click",function(e){
+		$("#content-nav img").attr("src","img/home-grey.png");
+		$("#channels-nav img").attr("src","img/menu-grey.png");
+		$("#search-nav img").attr("src","img/search-grey.png");
+		$("#notification-nav img").attr("src","img/ring-grey.png");
+		$("#userinfo-nav img").attr("src","img/user-red.png");
+		$("#no1").css("transform",translatebefore4);
+		$("#no2").css("transform",translatebefore3);
+		$("#no3").css("transform",translatebefore2);
+		$("#no4").css("transform",translatebefore1);
+		$("#no5").css("transform",translatenow);
+	});
+	$('#no5').swipe({
+		swipeRight:function(){
+			$("#content-nav img").attr("src","img/home-grey.png");
+			$("#channels-nav img").attr("src","img/menu-grey.png");
+			$("#search-nav img").attr("src","img/search-grey.png");
+			$("#notification-nav img").attr("src","img/ring-red.png");
+			$("#userinfo-nav img").attr("src","img/user-grey.png");
+			$("#no1").css("transform",translatebefore3);
+			$("#no2").css("transform",translatebefore2);
+			$("#no3").css("transform",translatebefore1);
+			$("#no4").css("transform",translatenow);
+			$("#no5").css("transform",translatenext1);
+		},
+		threshold:100
+	});
+/*************************************no1上下滑动切换内容**************************************/
+	$("#no1-container").swipe({
+		swipeUp:function(e){
+			if(e.target.tagName == "IMG"){
+				targetid = $(e.target).parent().parent().attr("id");
+			}
+			else if(e.target.id.slice(0,3) == "no1"){
+				targetid = $(e.target).attr("id");
+			}
+			else{
+				targetid = $(e.target).parent().attr("id");
+			}
+			var idstring = targetid.slice(8);//返回表示第几页的字符串
+			var idnum = parseInt(idstring);
+			if(idnum == $("#no1-container").children().length){
+				alert("无更多最新资讯");
+				return;
+			}
+			$("#no1-container").css("transform","translate(0px,-" + idnum +"00%) translateZ(0px)");
+		},
+		threshold:100
+	});
+	$("#no1-container").swipe({
+		swipeDown:function(e){
+			if(e.target.tagName == "IMG"){
+				targetid = $(e.target).parent().parent().attr("id");
+			}
+			else{
+				targetid = $(e.target).parent().attr("id");
+			}
+			var idstring = targetid.slice(8);//返回表示第几页的字符串
+			var idnum = parseInt(idstring);
+			if(idnum > 1){
+				$("#no1-container").css("transform","translate(0px,-" + (idnum-2) +"00%) translateZ(0px)");
+			}			
+		},
+		threshold:100
+	});
+
+	
+/****************************************************************************************************/
+	$.getJSON( "/homepage_no2", function( data ){ 
+		var list  = data;
+		var ul = $("<ul />");
+		$.each(list.channels, function (index, value) { 
+			var li = $("<li />");
+			var span = $("<span />",{
+				"html" : value.title
+			});
+			span.css({"display":"block","padding-left":"5px","padding-top":"5px","color":"white"});
+			li.css("background-image","url(" + value.imgURL + ")");
+			li.css({"background-position":"center","background-size":"cover"});
+			li.css("width",deviceWidth/2-2);
+			li.css("height",deviceWidth/2-2);
+			li.css({"box-shadow":"inset 0px 10px 40px 0px #353434","box-sizing":"border-box","float":"left","display":"inline-block","border-right":"2px solid white",
+				"border-bottom":"2px solid white"});
+			li.append(span);
+			ul.append(li);
+		});
+		$("#no2").append(ul);
+	});
+
+	//$("#no2 ul li").width(deviceWidth/2 - 2);
+	//$("#no2 ul li").height(deviceWidth/2 - 2);
+	/*点击中no3的search_click样式按钮，弹出真正的搜索界面*/
+	$("#search_click").on('click',function(e){
+		$("#search_page").addClass("moved");
+	});
+	$("#search_bar img").on("click",function(e){
+		$("#search_page").removeClass("moved");
+	});
+	$.getJSON("/homepage_no3",function(data){
+		var list = data;
+		$.each(list.recommend,function(index,value){
+			var div = $("<div />",{
+				"class" : "content_recomm"
+			});
+			var span = $("<span />",{
+				"html" : value.title
+			});
+			span.css({"display":"block","padding-left":"5px","padding-top":"5px","color":"white"});
+			div.css("background-image","url(" + value.imgURL + ")");
+			div.css({"background-position":"center","background-size":"cover"});
+			div.css({"box-shadow":"inset 0px 10px 40px 0px #353434"});
+			div.append(span);
+
+			$("#no3-container p").after(div);
+		});
 	});
 });
 </script>

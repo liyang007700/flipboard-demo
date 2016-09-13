@@ -2,12 +2,20 @@ var express = require("express");
 var app = express();
 var bodyParser = require("body-parser");
 var MongoClient = require("mongodb").MongoClient;
-var mongoUrl = process.env.MONGO;
+var mongoUrl = "mongodb://localhost:27017/flipboard";
 var db;
 
-app.set("view engine", "ejs");
-app.use(express.static(__dirname + '/public'));
+app.set("view engine", "ejs");//模板渲染引擎设置为ejs
 
+app.use(express.static(__dirname + '/public'));//????????????????????????????????????????????????????????
+
+MongoClient.connect(mongoUrl, function(err, database) {
+	if (err) return console.log("error : " + err);
+	db = database;
+	app.listen( process.env.PORT || 5050, function() {//??????????????????????????????????????????
+		console.log("server started");
+	});
+});
 
 // configure app to use bodyParser()
 // this will let us get the data from a POST
@@ -15,10 +23,16 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 // where the app starts from user
 app.get("/", function(req, res) {
-	res.render("index");
+	res.render("index");//主页入口
 });
-
-
+// router for create new category (with website name, url, and icon)
+app.get("/category-create", function (req, res) {
+	res.render("category-create");
+});
+// router to get all category list by UI view(readonly)
+app.get("/category-index", function(req, res) {
+	res.render("category-index");
+});
 // router for login with json support, and record those logs!
 app.post("/login", function(req, res) {
 	// retrieve current time 
@@ -29,14 +43,12 @@ app.post("/login", function(req, res) {
 		res.json({ "status" : "success", "user" : req.body.user_name || "test", "time": now });
 	});
 });
-
 // router for save user behavior and resposne with relevant contents
 app.post("/picker-save", function(req, res) {
 	// save user behavior first 
 	// oh, escape this due to lack of time :-(
-
 	// then retreive related content with selected categories and send back thru json
-	var cursor = db.collection("content").find({"$or":req.body.channelselect_id }).sort({"_id": 1});
+	var cursor = db.collection("content").find({"$or":req.body.channelselect_id });//.sort({"_id": 1});
 	cursor.toArray(function(err, results) {
 		var output = {};
 		output.feed = results;
@@ -44,19 +56,33 @@ app.post("/picker-save", function(req, res) {
 	});
 });
 
-// router for create new category (with website name, url, and icon)
-app.get("/category-create", function (req, res) {
-	res.render("category-create");
+app.get("/homepage_no1",function(req,res) {
+	var cursor = db.collection("homepage_content").find();
+	cursor.toArray(function(err,results){
+		var output = {};
+		output.news = results;
+		res.json(output);
+	});
 });
-
-// router to get all category list by UI view(readonly)
-app.get("/category-index", function(req, res) {
-	res.render("category-index");
+app.get("/homepage_no2",function(req,res) {
+	var cursor = db.collection("homepage_channels").find();
+	cursor.toArray(function(err,results){
+		var output = {};
+		output.channels = results;
+		res.json(output);
+	});
 });
-
+app.get("/homepage_no3",function(req,res) {
+	var cursor = db.collection("homepage_search").find();
+	cursor.toArray(function(err,results){
+		var output = {};
+		output.recommend = results;
+		res.json(output);
+	});
+});
 // router to get all category list by JSON
 app.get("/category-list", function(req, res) {
-	var cursor = db.collection("category").find().sort({"_id": 1});
+	var cursor = db.collection("category").find();
 	cursor.toArray(function(err, results) {
 		var output = {};
 		output.feed = results;
@@ -64,7 +90,8 @@ app.get("/category-list", function(req, res) {
 	});
 })
 
-// router to save category creation
+// router to save category creation点击开始提交的数据存入数据库
+/*
 app.post("/category-save", function (req, res) {
 	// init data object 
 	var r = req.body, 
@@ -90,13 +117,6 @@ app.post("/category-save", function (req, res) {
 		res.redirect("/category-index");
 	});
 
-});
+});*/
 
 // need to make sure mongo connectivity before opening web service
-MongoClient.connect(mongoUrl, function(err, database) {
-	if (err) return console.log("error : " + err);
-	db = database;
-	app.listen( process.env.PORT || 5050, function() {
-		console.log("server started");
-	});
-});

@@ -9,19 +9,58 @@ html{
 body{	
 	font-family:"Microsoft Yahei","Helvetica Neue","Droid Sans Fallback","Heiti SC",sans-self,Tahoma,Arial,Roboto,"Droid Sans";
 	font-size:16px;
-	margin:0 auto;
-	height:100%;
-	width:100%;
-	max-width:100%;
 	overflow: hidden;
+	position:relative;
 }
 #cover{		
+	visibility: visible;
+	position:absolute;
+	width:100%;
 	height:100%;
 	background-image: url(../img/dark.jpg);
 	background-repeat: no-repeat;
 	background-size: cover;
 	background-attachment: fixed;
 	background-position: center;
+}
+.slide-wrapper{
+	visibility: visible;
+	position:absolute;
+	top:0;
+	left:0;
+	transform:translate(414px,0) translateZ(0px);
+	transition: all 250ms ease-in-out;
+	width:100%;
+	height:100%;
+	background:white;
+	display:flex;
+	align-items: center;
+}
+#select-content{
+	visibility: visible;
+	position:absolute;
+	top:0;
+	left:0;
+	transform:translate(414px,0) translateZ(0px);
+	transition: all 250ms ease-in-out;
+	height:100%;
+	width:100%;
+	background-color: white;
+	overflow: auto;
+}
+#homepage{
+	visibility: visible;
+	float:left;
+	z-index: 10;
+	position:absolute;
+	top:0;
+	left:0;
+	transform:translate(414px,0) translateZ(0px);
+	transition: all 250ms ease-in-out;
+	height:100%;
+	width:100%;
+	background-color: white;
+	overflow: hidden;
 }
 #box{
 	position:relative;
@@ -71,20 +110,6 @@ h1{
 
 
 /***********************登录界面CSS开始***************************/
-.slide-wrapper{
-	z-index: 4;
-	width:100%;
-	height:100%;
-	max-width: 100%;
-	position:absolute;
-	top:0px;
-	left:0px;
-	background:white;
-	transform:translate3d(-100%,0,0);
-	transition:all 250ms ease-in-out;/*CSS效果改变时间：250ms 匀速改变*/
-	display:flex;
-	align-items: center;
-}
 .slide-wrapper.moved{
 	transform:translate3d(0,0,0);
 }
@@ -182,18 +207,6 @@ button.ready{
 	clear:both;
 }
 /*******************************内容界面CSS********************************/
-#select-content{
-	height:100%;
-	z-index: 6;
-	width:100%;
-	position:absolute;
-	top:0px;
-	left:0px;
-	transform:translate3d(-100%,0,0);
-	transition:all 250ms ease-in-out;/*CSS效果改变时间：250ms 匀速改变*/
-	background-color: white;
-	overflow: auto;
-}
 #select-content.moved{
 	transform:translate3d(0,0,0);
 }
@@ -217,14 +230,13 @@ button.ready{
 	border-radius: 10%;
 	height:2em;
 	position:absolute;
-	top:0px;
+	top:7px;
 	right:5px;
 	color: #FFFFFF;
 }
 #channels-select.visible {
 	display:block;
 }
-
 .subcontent{
 	z-index: 2;
 	position:relative;
@@ -240,12 +252,20 @@ button.ready{
 	top:33px;
 	text-align: center;
 }
-
-#channels li:nth-child(1) .subcontent{
-	background-image:url('../img/moon.jpg');
-	background-position: 50% 66%;
+.subcontent p{
+	font-size:7pt;
+	color:white;
+	width:60px;
+	margin:0 auto;
+	position:relative;
+	top:50px;
 }
-#channels li:nth-child(1) .checked{
+#channels li:nth-child(1) .subcontent{
+	background-image:url('../img/technology.jpg');
+	background-size: cover;
+	background-position: 50% 13%;
+}
+#channels li:nth-child(1) .subcontent.checked{
 	background-color: #2F5EE6;
 	background-image:none;
 }
@@ -257,22 +277,24 @@ button.ready{
 }
 
 #channels li:nth-child(2) .subcontent{
-	background-image:url('../img/art.jpg');
+	background-image:url('../img/business.jpg');
+	background-size: cover;
 	background-position: 50% 66%;
 }
 #channels li:nth-child(2) .subcontent.checked{
-	background-color: #F34462;
+	background-color: #9C2C2C;
 	background-image:none;
 }
 #channels li:nth-child(2) .subcontent h3{
-	background-color: #F34462;
+	background-color: #9C2C2C;
 }
 #channels li:nth-child(2) .submenu{
-	background-color: #F34462;
+	background-color: #9C2C2C;
 }
 
 #channels li:nth-child(3) .subcontent{
 	background-image:url('../img/life.jpg');
+	background-size: cover;
 	background-position: 50% 66%;
 }
 #channels li:nth-child(3) .subcontent.checked{
@@ -287,8 +309,9 @@ button.ready{
 }
 
 #channels li:nth-child(4) .subcontent{
-	background-image:url('../img/sports.jpg');
-	background-position: 50% 66%;
+	background-image:url('../img/entertainment.jpg');
+	background-size: cover;
+	background-position: 50% 24%;
 }
 #channels li:nth-child(4) .subcontent.checked{
 	background-color: green;
@@ -303,6 +326,7 @@ button.ready{
 
 #channels li:nth-child(5) .subcontent{
 	background-image:url('../img/food.jpg');
+	background-size: cover;
 	background-position: 50% 66%;
 }
 #channels li:nth-child(5) .subcontent.checked{
@@ -317,7 +341,8 @@ button.ready{
 }
 
 #channels li:nth-child(6) .subcontent{
-	background-image:url('../img/entertainment.jpg');
+	background-image:url('../img/design.jpg');
+	background-size: cover;
 	background-position: 50% 50%;
 }
 #channels li:nth-child(6) .subcontent.checked{
@@ -333,6 +358,7 @@ button.ready{
 
 #channels li:nth-child(7) .subcontent{
 	background-image:url('../img/camera.jpg');
+	background-size: cover;
 	background-position: 50% 0%;
 }
 #channels li:nth-child(7) .subcontent.checked{
@@ -347,8 +373,9 @@ button.ready{
 }
 
 #channels li:nth-child(8) .subcontent{
-	background-image:url('../img/business.jpg');
-	background-position: 50% 0%;
+	background-image:url('../img/movie.jpg');
+	background-size: cover;
+	background-position: 50% 12%;
 }
 #channels li:nth-child(8) .subcontent.checked{
 	background-color: #008272;
@@ -363,7 +390,8 @@ button.ready{
 
 #channels li:nth-child(9) .subcontent{
 	background-image:url('../img/exercise.jpg');
-	background-position: 100% 0%;
+	background-size: cover;
+	background-position: 0% 84%;
 }
 #channels li:nth-child(9) .subcontent.checked{
 	background-color: #820019;
@@ -376,7 +404,8 @@ button.ready{
 	background-color: #820019;
 }
 #channels li:nth-child(10) .subcontent{
-	background-image:url('../img/artist.jpg');
+	background-image:url('../img/art.jpg');
+	background-size: cover;
 	background-position: 50% 0%;
 }
 #channels li:nth-child(10) .subcontent.checked{
@@ -386,18 +415,8 @@ button.ready{
 #channels li:nth-child(10) .subcontent h3{
 	background-color: #1E0082;
 }
-
 #channels li:nth-child(10) .submenu{
 	background-color: #1E0082;
-}
-
-.subcontent p{
-	font-size:7pt;
-	color:white;
-	width:60px;
-	margin:0 auto;
-	position:relative;
-	top:50px;
 }
 .subcontent .select-btn{
 	width:20px;
@@ -413,18 +432,14 @@ button.ready{
 	background-image: url("../img/check.png");
 	border:none;
 }
-
 .menu-info .on,
 .menu-info.enable .off {
 	display: none;
 }
-
-
 .menu-info.enable .on,
 .menu-info .off {
 	display: block;
 }
-
 .submenu{
 	z-index:1;
 	transform:translate3d(0,-100%,0);
@@ -453,7 +468,6 @@ button.ready{
 	max-height: 50px;
 	border-radius: 10%;
 }
-
 .submenu ul li p{
 	text-align: center;
 	font-size:8px;
@@ -461,64 +475,140 @@ button.ready{
 }
 
 /********************************交互区****************************/
+#homepage.moved{
+	transform:translate3d(0,0,0);
+}
 
-#recommend_channels{
-	height:100%;
+#homepage nav ul li{
+	padding:0px;
+	border:0px;
+	margin:0px;
+	display:block;
+	float:left;
+	height:54px;
+}
+#homepage nav ul li img{
+	display:block;
+	margin:15px auto;
+}
+#homepage-content{
+	overflow: hidden;
+	position:relative;	
+}
+#no1,#no2,#no3,#no4,#no5{
+	overflow: hidden;
+	visibility:visible;
+	position:absolute;
+	float:left;	
+	transition-duration: 100ms;	
+	width:100%;
+	height:100%;/*父元素的百分之百*/
+}
+#no1{
+	
+}
+#no2{
+	overflow: auto;
+}
+#no3{
+	overflow: auto;
+}
+#no4{
+	overflow: auto;
+}
+#no5{
+	text-align: center;
+}
+#no1-container{
+	width:100%;
+	height:100%;/*父元素的百分之百*/
+	position:relative;
+	transform: translate3d(0px,0px,0px);
+	transition:all 1000ms;
+}
+/*********************no2*******************/
+#no2 ul li{
+	box-sizing: border-box;
+	float:left;
+	display:inline-block;
+	background-color:pink;
+	border-right: 2px solid white;
+	border-bottom: 2px solid white;
+}
+/*********************no3*******************/
+#no3-container{
+	width:100%;
+	height:100%;/*父元素的百分之百*/
+	position:relative;
+}
+#search_click{
+	height:40px;
+	font-size: 16px;
+	margin:10px 10px;
+	border-radius: 7px;
+	background-color:#ECECEC;
+	position:relative;
+}
+#search_click span{
+	position:absolute;
+	top:12px;
+	left:36px;
+	color:#858585;
+}
+#search_click img{
+	position:absolute;
+	display:inline-block;
+	top: 8px;
+	left:8px ;
+}
+#no3 p,#no2 p{
+	width:95%;
+	margin:30px auto 10px auto;
+	font:10px;
+	color:#DF2828;
+	z-index: 10;
+}
+.content_recomm{
+	width:95%;
+	margin:10px auto;
+	z-index: 10;
+	height:150px;
+}
+
+#search_page{	
+	background-color: white;
 	z-index: 10;
 	width:100%;
+	height:100%;
 	position:absolute;
 	top:0px;
 	left:0px;
-	transform:translate3d(-100%,0,0);
-	transition:all 250ms ease-in-out;/*CSS效果改变时间：250ms 匀速改变*/
+	transform: translate3d(-100%,0,0);
+	transition: 300ms all;
+}
+#search_page.moved{
+	transform: translate3d(0,0,0);
+}
+#search_bar{
 	background-color: white;
-	overflow: auto;
+	height:50px;
 }
-
-#recommend_channels.moved{
-	transform:translate3d(0,0,0);
+#search_bar img{
+	display: inline-block;
+	margin-top:11px;
+	margin-left:16px;
 }
-#recommend_channels h2{
-	float:left;
-	width:50%;
-	font-weight: bold;
-	font-size: .8em;
-	padding:1em 0em 1em 1em;
-	margin:0;
-	background-color:white;
-	z-index: 5;
+#search_bar input{
+	height:20px;
+	position:absolute;
+	top:16px;
+	left:46px;
+	display: inline-block;
+	background: none;
+	padding-bottom: 1px;
+	border:none;
 }
-#exit_home{
-	float:right;
-	display:block;
-	font-size: .8em;
-	width:5em;
-	background-color: #DF2828;
-	border-radius: 10%;
-	height:2em;
-	color: #FFFFFF;
-}
-#logname {
-	font-size: .8em;
-	padding:10px;
-	float:right;
-	margin-top: 5px;
-	margin-right: 10px;
-}
-
-#channelName {
-	padding: 1em;
-	font-size: .8em;
-}
-
-#channelName p, #channelName li {
-	line-height: 1.5em;
-}
-
-#channelName .title {
-	font-weight: bold;
-}
-
-#channelName ul {
-	margin-bottom: 20px;
+#no4 p{
+	margin:10px 10px;
+	color:#908E8E;
 }
