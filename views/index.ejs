@@ -307,8 +307,8 @@ $(function(){
 	/*recommend_channels页按退出登录按钮回到首页*/
 	$("#homepage nav ul li").width(deviceWidth/5);//目录元素并排在上部
 	/****************************内容容器排在下部*******************************/
-	$("#homepage-content").height(deviceHeight-54);
-	$("#homepage-content").width(deviceWidth);
+	//$("#homepage-content").height(deviceHeight-54);
+	//$("#homepage-content").width(deviceWidth);
 /***************************************************************************/
 	var translatenow = "translate(0px,0px) translateZ(0px)";//现在呈现homepage content的坐标
 	var translatenext1 = "translate(" + deviceWidth +"px,0px) translateZ(0px)";//五个子部分左边第一个坐标
@@ -327,30 +327,45 @@ $(function(){
 	$("#no5").css("transform",translatenext4);
 
 	$("#content-nav img").attr("src","img/home-red.png");
+	$("#content-nav").css("border-bottom","2px solid #DF2828");
 	$("#channels-nav img").attr("src","img/menu-grey.png");
+	$("#channels-nav").css("border-bottom","none");
 	$("#search-nav img").attr("src","img/search-grey.png");
+	$("#search-nav").css("border-bottom","none");
 	$("#notification-nav img").attr("src","img/ring-grey.png");
+	$("#notification-nav").css("border-bottom","none");
 	$("#userinfo-nav img").attr("src","img/user-grey.png");
+	$("#userinfo-nav").css("border-bottom","none");
 /***********************************点击nav或者滑动内容区切换**********************/
-	$("#content-nav").on("click",function(e){
+	$("#content-nav").on("click",function(e){//切换到no1
 		$("#content-nav img").attr("src","img/home-red.png");
+		$("#content-nav").css("border-bottom","2px solid #DF2828");
 		$("#channels-nav img").attr("src","img/menu-grey.png");
+		$("#channels-nav").css("border-bottom","none");
 		$("#search-nav img").attr("src","img/search-grey.png");
+		$("#search-nav").css("border-bottom","none");
 		$("#notification-nav img").attr("src","img/ring-grey.png");
+		$("#notification-nav").css("border-bottom","none");
 		$("#userinfo-nav img").attr("src","img/user-grey.png");
+		$("#userinfo-nav").css("border-bottom","none");
 		$("#no1").css("transform",translatenow);
 		$("#no2").css("transform",translatenext1);
 		$("#no3").css("transform",translatenext2);
 		$("#no4").css("transform",translatenext3);
 		$("#no5").css("transform",translatenext4);
 	});
-	$('#no1').swipe({
+	$('#no1').swipe({//切换到no2
 		swipeLeft:function(){
 			$("#content-nav img").attr("src","img/home-grey.png");
+			$("#content-nav").css("border-bottom","none");
 			$("#channels-nav img").attr("src","img/menu-red.png");
+			$("#channels-nav").css("border-bottom","2px solid #DF2828");
 			$("#search-nav img").attr("src","img/search-grey.png");
+			$("#search-nav").css("border-bottom","none");
 			$("#notification-nav img").attr("src","img/ring-grey.png");
+			$("#notification-nav").css("border-bottom","none");
 			$("#userinfo-nav img").attr("src","img/user-grey.png");
+			$("#userinfo-nav").css("border-bottom","none");
 			$("#no1").css("transform",translatebefore1);
 			$("#no2").css("transform",translatenow);
 			$("#no3").css("transform",translatenext1);
@@ -359,25 +374,35 @@ $(function(){
 		},
 		threshold:100
 	});
-	$("#channels-nav").on("click",function(e){
+	$("#channels-nav").on("click",function(e){//切换到no2
 		$("#content-nav img").attr("src","img/home-grey.png");
+		$("#content-nav").css("border-bottom","none");
 		$("#channels-nav img").attr("src","img/menu-red.png");
+		$("#channels-nav").css("border-bottom","2px solid #DF2828");
 		$("#search-nav img").attr("src","img/search-grey.png");
+		$("#search-nav").css("border-bottom","none");
 		$("#notification-nav img").attr("src","img/ring-grey.png");
+		$("#notification-nav").css("border-bottom","none");
 		$("#userinfo-nav img").attr("src","img/user-grey.png");
+		$("#userinfo-nav").css("border-bottom","none");
 		$("#no1").css("transform",translatebefore1);
 		$("#no2").css("transform",translatenow);
 		$("#no3").css("transform",translatenext1);
 		$("#no4").css("transform",translatenext2);
 		$("#no5").css("transform",translatenext3);
 	});
-	$('#no2').swipe({
+	$('#no2').swipe({//回到no1
 		swipeRight:function(){
 			$("#content-nav img").attr("src","img/home-red.png");
+			$("#content-nav").css("border-bottom","2px solid #DF2828");
 			$("#channels-nav img").attr("src","img/menu-grey.png");
+			$("#channels-nav").css("border-bottom","none");
 			$("#search-nav img").attr("src","img/search-grey.png");
+			$("#search-nav").css("border-bottom","none");
 			$("#notification-nav img").attr("src","img/ring-grey.png");
+			$("#notification-nav").css("border-bottom","none");
 			$("#userinfo-nav img").attr("src","img/user-grey.png");
+			$("#userinfo-nav").css("border-bottom","none");
 			$("#no1").css("transform",translatenow);
 			$("#no2").css("transform",translatenext1);
 			$("#no3").css("transform",translatenext2);
@@ -386,13 +411,18 @@ $(function(){
 		},
 		threshold:100
 	});
-	$('#no2').swipe({
+	$('#no2').swipe({//no3
 		swipeLeft:function(){
 			$("#content-nav img").attr("src","img/home-grey.png");
+			$("#content-nav").css("border-bottom","none");
 			$("#channels-nav img").attr("src","img/menu-grey.png");
+			$("#channels-nav").css("border-bottom","none");
 			$("#search-nav img").attr("src","img/search-red.png");
+			$("#search-nav").css("border-bottom","2px solid #DF2828");
 			$("#notification-nav img").attr("src","img/ring-grey.png");
+			$("#notification-nav").css("border-bottom","none");
 			$("#userinfo-nav img").attr("src","img/user-grey.png");
+			$("#userinfo-nav").css("border-bottom","none");
 			$("#no1").css("transform",translatebefore2);
 			$("#no2").css("transform",translatebefore1);
 			$("#no3").css("transform",translatenow);
@@ -401,25 +431,35 @@ $(function(){
 		},
 		threshold:100
 	});
-	$("#search-nav").on("click",function(e){
+	$("#search-nav").on("click",function(e){//no3
 		$("#content-nav img").attr("src","img/home-grey.png");
+		$("#content-nav").css("border-bottom","none");
 		$("#channels-nav img").attr("src","img/menu-grey.png");
+		$("#channels-nav").css("border-bottom","none");
 		$("#search-nav img").attr("src","img/search-red.png");
+		$("#search-nav").css("border-bottom","2px solid #DF2828");
 		$("#notification-nav img").attr("src","img/ring-grey.png");
+		$("#notification-nav").css("border-bottom","none");
 		$("#userinfo-nav img").attr("src","img/user-grey.png");
+		$("#userinfo-nav").css("border-bottom","none");
 		$("#no1").css("transform",translatebefore2);
 		$("#no2").css("transform",translatebefore1);
 		$("#no3").css("transform",translatenow);
 		$("#no4").css("transform",translatenext1);
 		$("#no5").css("transform",translatenext2);
 	});
-	$('#no3').swipe({
+	$('#no3').swipe({//no2
 		swipeRight:function(){
 			$("#content-nav img").attr("src","img/home-grey.png");
+			$("#content-nav").css("border-bottom","none");
 			$("#channels-nav img").attr("src","img/menu-red.png");
+			$("#channels-nav").css("border-bottom","2px solid #DF2828");
 			$("#search-nav img").attr("src","img/search-grey.png");
+			$("#search-nav").css("border-bottom","none");
 			$("#notification-nav img").attr("src","img/ring-grey.png");
+			$("#notification-nav").css("border-bottom","none");
 			$("#userinfo-nav img").attr("src","img/user-grey.png");
+			$("#userinfo-nav").css("border-bottom","none");
 			$("#no1").css("transform",translatebefore1);
 			$("#no2").css("transform",translatenow);
 			$("#no3").css("transform",translatenext1);
@@ -428,13 +468,18 @@ $(function(){
 		},
 		threshold:100
 	});
-	$('#no3').swipe({
+	$('#no3').swipe({//no4
 		swipeLeft:function(){
 			$("#content-nav img").attr("src","img/home-grey.png");
+			$("#content-nav").css("border-bottom","none");
 			$("#channels-nav img").attr("src","img/menu-grey.png");
+			$("#channels-nav").css("border-bottom","none");
 			$("#search-nav img").attr("src","img/search-grey.png");
+			$("#search-nav").css("border-bottom","none");
 			$("#notification-nav img").attr("src","img/ring-red.png");
+			$("#notification-nav").css("border-bottom","2px solid #DF2828");
 			$("#userinfo-nav img").attr("src","img/user-grey.png");
+			$("#userinfo-nav").css("border-bottom","none");
 			$("#no1").css("transform",translatebefore3);
 			$("#no2").css("transform",translatebefore2);
 			$("#no3").css("transform",translatebefore1);
@@ -443,25 +488,35 @@ $(function(){
 		},
 		threshold:100
 	});
-	$("#notification-nav").on("click",function(e){
+	$("#notification-nav").on("click",function(e){//no4
 		$("#content-nav img").attr("src","img/home-grey.png");
+		$("#content-nav").css("border-bottom","none");
 		$("#channels-nav img").attr("src","img/menu-grey.png");
+		$("#channels-nav").css("border-bottom","none");
 		$("#search-nav img").attr("src","img/search-grey.png");
+		$("#search-nav").css("border-bottom","none");
 		$("#notification-nav img").attr("src","img/ring-red.png");
+		$("#notification-nav").css("border-bottom","2px solid #DF2828");
 		$("#userinfo-nav img").attr("src","img/user-grey.png");
+		$("#userinfo-nav").css("border-bottom","none");
 		$("#no1").css("transform",translatebefore3);
 		$("#no2").css("transform",translatebefore2);
 		$("#no3").css("transform",translatebefore1);
 		$("#no4").css("transform",translatenow);
 		$("#no5").css("transform",translatenext1);
 	});
-	$('#no4').swipe({
+	$('#no4').swipe({//no3
 		swipeRight:function(){
 			$("#content-nav img").attr("src","img/home-grey.png");
+			$("#content-nav").css("border-bottom","none");
 			$("#channels-nav img").attr("src","img/menu-grey.png");
+			$("#channels-nav").css("border-bottom","none");
 			$("#search-nav img").attr("src","img/search-red.png");
+			$("#search-nav").css("border-bottom","2px solid #DF2828");
 			$("#notification-nav img").attr("src","img/ring-grey.png");
+			$("#notification-nav").css("border-bottom","none");
 			$("#userinfo-nav img").attr("src","img/user-grey.png");
+			$("#userinfo-nav").css("border-bottom","none");
 			$("#no1").css("transform",translatebefore2);
 			$("#no2").css("transform",translatebefore1);
 			$("#no3").css("transform",translatenow);
@@ -470,13 +525,18 @@ $(function(){
 		},
 		threshold:100
 	});
-	$('#no4').swipe({
+	$('#no4').swipe({//no5
 		swipeLeft:function(){
 			$("#content-nav img").attr("src","img/home-grey.png");
+			$("#content-nav").css("border-bottom","none");
 			$("#channels-nav img").attr("src","img/menu-grey.png");
+			$("#channels-nav").css("border-bottom","none");
 			$("#search-nav img").attr("src","img/search-grey.png");
+			$("#search-nav").css("border-bottom","none");
 			$("#notification-nav img").attr("src","img/ring-grey.png");
+			$("#notification-nav").css("border-bottom","none");
 			$("#userinfo-nav img").attr("src","img/user-red.png");
+			$("#userinfo-nav").css("border-bottom","2px solid #DF2828");
 			$("#no1").css("transform",translatebefore4);
 			$("#no2").css("transform",translatebefore3);
 			$("#no3").css("transform",translatebefore2);
@@ -486,25 +546,35 @@ $(function(){
 		threshold:100
 	});
 
-	$("#userinfo-nav").on("click",function(e){
+	$("#userinfo-nav").on("click",function(e){//no5
 		$("#content-nav img").attr("src","img/home-grey.png");
+		$("#content-nav").css("border-bottom","none");
 		$("#channels-nav img").attr("src","img/menu-grey.png");
+		$("#channels-nav").css("border-bottom","none");
 		$("#search-nav img").attr("src","img/search-grey.png");
+		$("#search-nav").css("border-bottom","none");
 		$("#notification-nav img").attr("src","img/ring-grey.png");
+		$("#notification-nav").css("border-bottom","none");
 		$("#userinfo-nav img").attr("src","img/user-red.png");
+		$("#userinfo-nav").css("border-bottom","2px solid #DF2828");
 		$("#no1").css("transform",translatebefore4);
 		$("#no2").css("transform",translatebefore3);
 		$("#no3").css("transform",translatebefore2);
 		$("#no4").css("transform",translatebefore1);
 		$("#no5").css("transform",translatenow);
 	});
-	$('#no5').swipe({
+	$('#no5').swipe({//no4
 		swipeRight:function(){
 			$("#content-nav img").attr("src","img/home-grey.png");
+			$("#content-nav").css("border-bottom","none");
 			$("#channels-nav img").attr("src","img/menu-grey.png");
+			$("#channels-nav").css("border-bottom","none");
 			$("#search-nav img").attr("src","img/search-grey.png");
+			$("#search-nav").css("border-bottom","none");
 			$("#notification-nav img").attr("src","img/ring-red.png");
+			$("#notification-nav").css("border-bottom","2px solid #DF2828");
 			$("#userinfo-nav img").attr("src","img/user-grey.png");
+			$("#userinfo-nav").css("border-bottom","none");
 			$("#no1").css("transform",translatebefore3);
 			$("#no2").css("transform",translatebefore2);
 			$("#no3").css("transform",translatebefore1);
