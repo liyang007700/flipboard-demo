@@ -6,7 +6,9 @@ var db, env;
 
 if (!process.env.NODE_ENV) { env = require('node-env-file')(__dirname + '/.env'); }
 
-var mongoUrl = process.env.bluemix_mongo_connection || process.env.mongodb_auth;
+// var mongoUrl = process.env.bluemix_mongo_connection || process.env.mongodb_auth;
+
+var mongoUrl = "mongodb://liyang:liyang007@ds021016.mlab.com:21016/flipbroad";
 
 
 app.set("view engine", "ejs");//模板渲染引擎设置为ejs
