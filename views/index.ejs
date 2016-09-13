@@ -100,10 +100,8 @@
 $(function(){
 	var deviceWidth = window.screen.width;
 	var deviceHeight = window.screen.height;
-	console.log("deviceWidth : " + deviceWidth);
-	console.log("deviceHeight : " + deviceHeight);
-	$("body").width(deviceWidth);
-	$("body").height(deviceHeight);
+	$("body").width(window.screen.width);
+	$("body").height(window.screen.height);
 	/****************************************************/
 	/*左边滑出登录界面*/
 	$('#btn-Login').on("click",function(e){
