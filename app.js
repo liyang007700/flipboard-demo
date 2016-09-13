@@ -7,16 +7,15 @@ var db;
 
 app.set("view engine", "ejs");//模板渲染引擎设置为ejs
 
-app.use(express.static(__dirname + '/public'));//????????????????????????????????????????????????????????
-
+app.use(express.static(__dirname + '/public'));
+// need to make sure mongo connectivity before opening web service
 MongoClient.connect(mongoUrl, function(err, database) {
 	if (err) return console.log("error : " + err);
 	db = database;
-	app.listen( process.env.PORT || 5050, function() {//??????????????????????????????????????????
+	app.listen( process.env.PORT || 5050, function() {
 		console.log("server started");
 	});
 });
-
 // configure app to use bodyParser()
 // this will let us get the data from a POST
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -55,16 +54,7 @@ app.post("/picker-save", function(req, res) {
 		res.json(output);
 	});
 });
-
-app.get("/homepage_no1",function(req,res) {
-	var cursor = db.collection("homepage_content").find();
-	cursor.toArray(function(err,results){
-		var output = {};
-		output.news = results;
-		res.json(output);
-	});
-});
-app.get("/homepage_no2",function(req,res) {
+app.get("/homepage-channels",function(req,res) {
 	var cursor = db.collection("homepage_channels").find();
 	cursor.toArray(function(err,results){
 		var output = {};
@@ -72,7 +62,7 @@ app.get("/homepage_no2",function(req,res) {
 		res.json(output);
 	});
 });
-app.get("/homepage_no3",function(req,res) {
+app.get("/homepage-search",function(req,res) {
 	var cursor = db.collection("homepage_search").find();
 	cursor.toArray(function(err,results){
 		var output = {};
@@ -88,10 +78,10 @@ app.get("/category-list", function(req, res) {
 		output.feed = results;
 		res.json(output);
 	});
-})
+});
 
 // router to save category creation点击开始提交的数据存入数据库
-/*
+
 app.post("/category-save", function (req, res) {
 	// init data object 
 	var r = req.body, 
@@ -117,6 +107,4 @@ app.post("/category-save", function (req, res) {
 		res.redirect("/category-index");
 	});
 
-});*/
-
-// need to make sure mongo connectivity before opening web service
+});

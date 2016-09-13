@@ -624,7 +624,7 @@ $(function(){
 
 	
 /****************************************************************************************************/
-	$.getJSON( "/homepage_no2", function( data ){ 
+	$.getJSON( "/homepage-channels", function( data ){ 
 		var list  = data;
 		var ul = $("<ul />");
 		$.each(list.channels, function (index, value) { 
@@ -654,7 +654,7 @@ $(function(){
 	$("#search_bar img").on("click",function(e){
 		$("#search_page").removeClass("moved");
 	});
-	$.getJSON("/homepage_no3",function(data){
+	$.getJSON("/homepage-search",function(data){
 		var list = data;
 		$.each(list.recommend,function(index,value){
 			var div = $("<div />",{
