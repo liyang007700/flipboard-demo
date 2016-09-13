@@ -2,7 +2,7 @@ var express = require("express");
 var app = express();
 var bodyParser = require("body-parser");
 var MongoClient = require("mongodb").MongoClient;
-var mongoUrl = "mongodb://localhost:27017/flipboard";
+var mongoUrl = "mongodb://liyang:liyang007@ds021016.mlab.com:21016/flipbroad";
 var db;
 
 app.set("view engine", "ejs");//模板渲染引擎设置为ejs
